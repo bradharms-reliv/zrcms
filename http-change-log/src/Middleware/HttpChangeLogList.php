@@ -10,9 +10,9 @@ use Zend\Diactoros\Response\HtmlResponse;
 use Zrcms\CoreApplication\Api\ChangeLog\GetHumanReadableChangeLogByDateRange;
 
 /**
- * This outputs the change log as an HTML table or as a CSV file depending on query params.
+ * This outputs the change log.
  *
- * Note: JSON output functionaliy may be added in the future. If JSON is added, HTML output may be depricated.
+ * Supports JSON, CSV, and HTML-table output depending on query params.
  *
  * Class ChangeLogHtml
  *
@@ -73,8 +73,20 @@ class HttpChangeLogList implements MiddlewareInterface
                 return $this->makeCsvResponse($description, $humanReadableEvents);
                 break;
             default:
-                return new HtmlResponse('400 Bad Request - Invalid "content-type" param', 400);
+                //Default which returns "application/json"
+                return $this->makeJsonResponse($description, $humanReadableEvents);
         }
+    }
+
+    /**
+     * @param $description
+     * @param $humanReadableEvents
+     *
+     * @return HtmlResponse
+     */
+    protected function makeJsonResponse($description, $humanReadableEvents)
+    {
+        return new Response\JsonResponse(['description' => $description, 'events' => $events]);
     }
 
     /**
