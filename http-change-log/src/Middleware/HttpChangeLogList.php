@@ -12,7 +12,7 @@ use Zrcms\CoreApplication\Api\ChangeLog\GetHumanReadableChangeLogByDateRange;
 /**
  * This outputs the change log.
  *
- * Supports JSON, CSV, and HTML-table output depending on query params.
+ * Supports JSON, CSV, and HTML-table output depending "content-type" query param.
  *
  * Class ChangeLogHtml
  *
