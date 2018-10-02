@@ -56,11 +56,6 @@ class HttpChangeLogList implements MiddlewareInterface
         $greaterThanYear = $greaterThanYear->sub(new \DateInterval('P' . $days . 'D'));
         $lessThanYear = new \DateTime();
 
-        //It is important to convert these times to UTC or DB "where" clauses may be inaccureate
-        $utcTimeZone = new \DateTimeZone('UTC');
-        $greaterThanYear->setTimezone($utcTimeZone);
-        $lessThanYear->setTimezone($utcTimeZone);
-
         $humanReadableEvents = $this->getHumanReadableChangeLogByDateRange->__invoke($greaterThanYear, $lessThanYear);
 
         $description = 'Content change log events for ' . $days . ' days'

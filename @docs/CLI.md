@@ -1,22 +1,26 @@
 Command Line
 ============
 
-## Examples ##
+## Simple Import Steps ##
 
-Simple Import Steps (ignore everything else in this file unless you're doing something advanced):
+1) In MySQL workbench, run the SQL command "set foreign_key_checks=0;" then select all zrcms_* tables and right click and "drop tables"
+
+2) In an IDE, turn RCM-compat OFF and ZRCMS ON in config/_server-environment/local-override.php
+
+3) Run these bash commands:
 ```bash
-#In MySQL workbench do:
-# 1) run the SQL command "set foreign_key_checks=0;"
-# 2) select all zrcms_* tables and right click and "drop tables"
-#In an IDE, turn RCM-compat OFF and ZRCMS ON in config/_server-environment/local-override.php
 cd /www/vagrant-web
 vagrant ssh
 cd /www/web
 ENV="local" bin/console orm:schema-tool:update --force
 ENV="local" bin/console rcm:export --file ./data/rcm-data.json
 ENV="local" bin/console zrcms:import --file ./data/rcm-data.json 
-#In an IDE, turn RCM-compat ON and ZRCMS ON in config/_server-environment/local-override.php
+
 ```
+
+4) In an IDE, turn RCM-compat ON and ZRCMS ON in config/_server-environment/local-override.php
+
+## Advanced usage ##
 
 Doctrine Dump:
 

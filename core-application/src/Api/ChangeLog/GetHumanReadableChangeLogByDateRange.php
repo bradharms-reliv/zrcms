@@ -13,7 +13,7 @@ class GetHumanReadableChangeLogByDateRange
 
     /**
      * @param GetChangeLogByDateRange $getChangeLogByDateRange
-     * @param ChangeLogEventToString  $changeLogEventToString
+     * @param ChangeLogEventToString $changeLogEventToString
      */
     public function __construct(
         GetChangeLogByDateRange $getChangeLogByDateRange,
@@ -32,8 +32,6 @@ class GetHumanReadableChangeLogByDateRange
      */
     public function __invoke(\DateTime $greaterThanYear, \DateTime $lessThanYear)
     {
-        $utcTimezone = new \DateTimeZone('UTC');
-
         $humanReadableEvents = [];
         /** @var ChangeLogEvent $changeLogEvent */
         foreach ($this->getChangeLogByDateRange->__invoke($greaterThanYear, $lessThanYear) as $changeLogEvent) {
