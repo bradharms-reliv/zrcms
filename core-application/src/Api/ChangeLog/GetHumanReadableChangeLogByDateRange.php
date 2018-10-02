@@ -13,7 +13,7 @@ class GetHumanReadableChangeLogByDateRange
 
     /**
      * @param GetChangeLogByDateRange $getChangeLogByDateRange
-     * @param ChangeLogEventToString  $changeLogEventToString
+     * @param ChangeLogEventToString $changeLogEventToString
      */
     public function __construct(
         GetChangeLogByDateRange $getChangeLogByDateRange,

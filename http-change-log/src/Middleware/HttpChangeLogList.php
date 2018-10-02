@@ -10,8 +10,9 @@ use Zend\Diactoros\Response\HtmlResponse;
 use Zrcms\CoreApplication\Api\ChangeLog\GetHumanReadableChangeLogByDateRange;
 
 /**
- * This outputs the change log as an HTML table.
- * WARNING: This may be REPLACED with a JSON API at some point.
+ * This outputs the change log.
+ *
+ * Supports JSON, CSV, and HTML-table output depending "content-type" query param.
  *
  * Class ChangeLogHtml
  *
@@ -34,7 +35,7 @@ class HttpChangeLogList implements MiddlewareInterface
 
     /**
      * @param ServerRequestInterface $request
-     * @param DelegateInterface      $delegate
+     * @param DelegateInterface $delegate
      *
      * @return \Psr\Http\Message\ResponseInterface|HtmlResponse|Response\JsonResponse
      * @throws \Exception
@@ -54,6 +55,7 @@ class HttpChangeLogList implements MiddlewareInterface
         $greaterThanYear = new \DateTime();
         $greaterThanYear = $greaterThanYear->sub(new \DateInterval('P' . $days . 'D'));
         $lessThanYear = new \DateTime();
+
         $humanReadableEvents = $this->getHumanReadableChangeLogByDateRange->__invoke($greaterThanYear, $lessThanYear);
 
         $description = 'Content change log events for ' . $days . ' days'
@@ -71,8 +73,20 @@ class HttpChangeLogList implements MiddlewareInterface
                 return $this->makeCsvResponse($description, $humanReadableEvents);
                 break;
             default:
-                return new HtmlResponse('400 Bad Request - Invalid "content-type" param', 400);
+                //Default which returns "application/json"
+                return $this->makeJsonResponse($description, $humanReadableEvents);
         }
+    }
+
+    /**
+     * @param $description
+     * @param $humanReadableEvents
+     *
+     * @return HtmlResponse
+     */
+    protected function makeJsonResponse($description, $humanReadableEvents)
+    {
+        return new Response\JsonResponse(['listDescription' => $description, 'events' => $humanReadableEvents]);
     }
 
     /**
