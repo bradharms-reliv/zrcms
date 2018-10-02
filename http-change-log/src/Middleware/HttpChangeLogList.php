@@ -7,6 +7,7 @@ use Interop\Http\ServerMiddleware\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Zend\Diactoros\Response;
 use Zend\Diactoros\Response\HtmlResponse;
+use Zend\Diactoros\Response\JsonResponse;
 use Zrcms\CoreApplication\Api\ChangeLog\GetHumanReadableChangeLogByDateRange;
 
 /**
@@ -82,11 +83,11 @@ class HttpChangeLogList implements MiddlewareInterface
      * @param $description
      * @param $humanReadableEvents
      *
-     * @return HtmlResponse
+     * @return JsonResponse
      */
     protected function makeJsonResponse($description, $humanReadableEvents)
     {
-        return new Response\JsonResponse(['listDescription' => $description, 'events' => $humanReadableEvents]);
+        return new JsonResponse(['listDescription' => $description, 'events' => $humanReadableEvents]);
     }
 
     /**
