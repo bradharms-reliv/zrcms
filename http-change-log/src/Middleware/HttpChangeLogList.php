@@ -10,8 +10,9 @@ use Zend\Diactoros\Response\HtmlResponse;
 use Zrcms\CoreApplication\Api\ChangeLog\GetHumanReadableChangeLogByDateRange;
 
 /**
- * This outputs the change log as an HTML table.
- * WARNING: This may be REPLACED with a JSON API at some point.
+ * This outputs the change log as an HTML table or as a CSV file depending on query params.
+ *
+ * Note: JSON output functionaliy may be added in the future, and if it is HTML output may be depricated.
  *
  * Class ChangeLogHtml
  *
@@ -34,7 +35,7 @@ class HttpChangeLogList implements MiddlewareInterface
 
     /**
      * @param ServerRequestInterface $request
-     * @param DelegateInterface      $delegate
+     * @param DelegateInterface $delegate
      *
      * @return \Psr\Http\Message\ResponseInterface|HtmlResponse|Response\JsonResponse
      * @throws \Exception
@@ -54,6 +55,12 @@ class HttpChangeLogList implements MiddlewareInterface
         $greaterThanYear = new \DateTime();
         $greaterThanYear = $greaterThanYear->sub(new \DateInterval('P' . $days . 'D'));
         $lessThanYear = new \DateTime();
+
+        //It is important to convert these times to UTC or DB "where" clauses may be inaccureate
+        $utcTimeZone = new \DateTimeZone('UTC');
+        $greaterThanYear->setTimezone($utcTimeZone);
+        $lessThanYear->setTimezone($utcTimeZone);
+
         $humanReadableEvents = $this->getHumanReadableChangeLogByDateRange->__invoke($greaterThanYear, $lessThanYear);
 
         $description = 'Content change log events for ' . $days . ' days'
