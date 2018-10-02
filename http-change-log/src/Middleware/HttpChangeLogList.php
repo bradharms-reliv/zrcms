@@ -86,7 +86,7 @@ class HttpChangeLogList implements MiddlewareInterface
      */
     protected function makeJsonResponse($description, $humanReadableEvents)
     {
-        return new Response\JsonResponse(['description' => $description, 'events' => $events]);
+        return new Response\JsonResponse(['listDescription' => $description, 'events' => $humanReadableEvents]);
     }
 
     /**
